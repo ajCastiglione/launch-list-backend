@@ -8,7 +8,7 @@ This will be the API for the frontend checklist application built in React.
 <ul>
 <li>email: string</li>
 <li>password: string</li>
-<li>tokens (JWT): array</li>
+<li>credentials: array</li>
 </ul>
 </li>
 <li>Checklist Schema (may need 1 per type of list, hopefully not)
