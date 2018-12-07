@@ -55,10 +55,13 @@ UserSchema.methods.generateAuthToken = function() {
 };
 
 // Attached to the schema
-UserSchema.methods.removeCredentials = function() {
+UserSchema.methods.removeCredentials = function(token) {
   let user = this;
-  user.credentials = [];
-  return user;
+  return user.updateOne({
+    $pull: {
+      credentials: { token }
+    }
+  });
 };
 
 // This is attached to the Model
