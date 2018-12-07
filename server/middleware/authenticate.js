@@ -1,14 +1,7 @@
-const jwt = require("jsonwebtoken");
+const { User } = require("./../models/user");
 
 const authenticate = (req, res, next) => {
-  if (!req.headers) {
-    return res.status(401).send({
-      err: "Unauthorized, invalid token. Please try signing in again."
-    });
-  }
-
-  let token = req.header("x-auth"),
-    decoded;
+  let token = req.header("x-auth");
 
   User.findByToken(token)
     .then(user => {
@@ -20,10 +13,8 @@ const authenticate = (req, res, next) => {
       next();
     })
     .catch(e => {
-      res.status(401).send();
+      res.status(401).send(e);
     });
 };
 
-module.exports = {
-  authenticate
-};
+module.exports = { authenticate };
