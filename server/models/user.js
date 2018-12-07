@@ -78,23 +78,6 @@ UserSchema.statics.findByToken = function(token) {
   });
 };
 
-// This is attached to the Model
-UserSchema.statics.findByToken = function(token) {
-  let User = this;
-  let decoded;
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (e) {
-    return Promise.reject();
-  }
-
-  return User.findOne({
-    _id: decoded._id,
-    "tokens.token": token,
-    "tokens.access": "auth"
-  });
-};
-
 // Attached to model - finds and authenticates existing user
 UserSchema.statics.findByCredentials = function(email, password) {
   let User = this;
@@ -111,6 +94,18 @@ UserSchema.statics.findByCredentials = function(email, password) {
           reject("Authentication failed!");
         }
       });
+    });
+  });
+};
+
+// Attached to model - removes user based on email
+UserSchema.statics.deleteUser = function(email) {
+  let User = this;
+
+  return User.findOneAndRemove({ email }).then(err => {
+    return new Promise((resolve, reject) => {
+      if (err) reject(err);
+      resolve(`Successfully removed the user ${email}`);
     });
   });
 };
