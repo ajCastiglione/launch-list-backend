@@ -1,8 +1,19 @@
 const mongoose = require("mongoose");
 
 const List = mongoose.model("List", {
-  text: {
-    type: String,
+  items: {
+    type: [
+      {
+        text: {
+          type: String,
+          required: true
+        },
+        completed: {
+          type: Boolean,
+          default: false
+        }
+      }
+    ],
     required: true,
     minlength: 1,
     trim: true
