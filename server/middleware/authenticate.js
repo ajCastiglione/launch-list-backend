@@ -1,26 +1,27 @@
 const jwt = require("jsonwebtoken");
 
 const authenticate = (req, res, next) => {
-  if (!req.body.headers) {
+  if (!req.headers) {
     return res.status(401).send({
       err: "Unauthorized, invalid token. Please try signing in again."
     });
   }
 
-  let token = req.body.headers["x-auth"].token
-    ? req.body.headers["x-auth"].token
-    : req.body.headers["x-auth"];
-  let decoded;
+  let token = req.header("x-auth"),
+    decoded;
 
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (e) {
-    return res.status(401).send({
-      err: "Unauthorized, invalid token. Please try signing in again."
+  User.findByToken(token)
+    .then(user => {
+      if (!user) {
+        return Promise.reject();
+      }
+      req.user = user;
+      req.token = token;
+      next();
+    })
+    .catch(e => {
+      res.status(401).send();
     });
-  }
-
-  next();
 };
 
 module.exports = {
