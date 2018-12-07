@@ -7,6 +7,7 @@ const _ = require("lodash");
 // Local Modules
 const { mongoose } = require("./db/mongoose");
 const { User } = require("./models/user");
+const { List } = require("./models/list");
 const { authenticate } = require("./middleware/authenticate");
 
 const app = express();
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
   res.send("home route");
 });
 
-/*
+/**
  * The first section will contain routes for user CRUD abilities.
  */
 
@@ -85,7 +86,7 @@ app.get("/users", authenticate, (req, res) => {
 
 // User account - will be basic res for now
 app.get("/users/me", authenticate, (req, res) => {
-  res.send(req.user);
+  res.header("x-auth", req.token).send(req.user);
 });
 
 app.delete("/users/signout", authenticate, (req, res) => {
@@ -105,6 +106,28 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
 
   User.deleteUser(email)
     .then(removedUser => res.send(removedUser))
+    .catch(e => res.status(400).send(e));
+});
+
+/**
+ * This section will be CRUD abilities for all lists
+ */
+
+app.post("/lists", authenticate, (req, res) => {
+  let list = new List({
+    items: req.body.items,
+    type: req.body.type,
+    _creator: req.user._id
+  });
+
+  list.save().then(doc => res.send(doc), e => res.status(400).send(e));
+});
+
+app.get("/lists", authenticate, (req, res) => {
+  List.find({ _creator: req.user._id })
+    .then(lists => {
+      res.send({ lists });
+    })
     .catch(e => res.status(400).send(e));
 });
 
