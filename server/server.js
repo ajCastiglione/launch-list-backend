@@ -25,6 +25,10 @@ app.get("/", (req, res) => {
   res.send("home route");
 });
 
+/*
+ * The first section will contain routes for user CRUD abilities.
+ */
+
 // Create new user - this will have to be modified so only admin can create users and not have it open so anyone can sign up
 app.post("/users/add", (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
@@ -49,7 +53,9 @@ app.post("/users/login", (req, res) => {
 
   User.findByCredentials(body.email, body.password)
     .then(user => {
-      user.removeCredentials();
+      if (user.credentials !== []) {
+        user.credentials = [];
+      }
       return user
         .generateAuthToken()
         .then(token => res.header("x-auth", token).send(user));
@@ -80,6 +86,26 @@ app.get("/users", authenticate, (req, res) => {
 // User account - will be basic res for now
 app.get("/users/me", authenticate, (req, res) => {
   res.send(req.user);
+});
+
+app.delete("/users/signout", authenticate, (req, res) => {
+  req.user
+    .removeCredentials(req.token)
+    .then(something => res.send({ success: `Signed user out successfully` }))
+    .catch(e => res.send({ err: `Unable to complete operation: ${e}` }));
+});
+
+// Remove user - will have to be admin role or some role that has 1 superadmin power
+app.delete("/users/remove/:email", authenticate, (req, res) => {
+  let email = req.params.email;
+  if (req.user.role !== "admin")
+    return res
+      .status(401)
+      .send({ err: "User role is too low to perform this action" });
+
+  User.deleteUser(email)
+    .then(removedUser => res.send(removedUser))
+    .catch(e => res.status(400).send(e));
 });
 
 app.listen(port, () => console.log("Server is running on port " + port));
