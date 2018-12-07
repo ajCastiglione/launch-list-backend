@@ -25,8 +25,8 @@ app.get("/", (req, res) => {
   res.send("home route");
 });
 
-// Create new user - this will have to be modified so only I can create users and not have it open so anyone can sign up
-app.post("/users", (req, res) => {
+// Create new user - this will have to be modified so only admin can create users and not have it open so anyone can sign up
+app.post("/users/add", (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
   let user = new User(body);
 
@@ -40,13 +40,6 @@ app.post("/users", (req, res) => {
     })
     .catch(e => {
       res.status(400).send(e);
-      User.deleteOne({ email: body.email }, err => {
-        if (err) {
-          console.log("Couldn't remove user by email", err);
-        } else {
-          console.log("Removed false signup");
-        }
-      });
     });
 });
 
@@ -66,6 +59,27 @@ app.post("/users/login", (req, res) => {
     });
 });
 
-app.post("/secured-route", authenticate, (req, res) => {});
+// GET all users
+app.get("/users", authenticate, (req, res) => {
+  if (req.user.role !== "admin")
+    return res
+      .status(401)
+      .send({ err: "User role is too low to perform this action" });
+
+  User.find({}).then(users => {
+    let info = [];
+
+    users.map((el, idx) => {
+      info.push(_.pick(el, ["_id", "email", "role"]));
+    });
+
+    res.send(info);
+  });
+});
+
+// User account - will be basic res for now
+app.get("/users/me", authenticate, (req, res) => {
+  res.send(req.user);
+});
 
 app.listen(port, () => console.log("Server is running on port " + port));
