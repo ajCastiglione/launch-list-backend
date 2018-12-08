@@ -7,6 +7,9 @@
     "start": "node server/server.js",
     "dev": "nodemon --no-deprecation server/server.js || node --no-deprecation server/server.js"
   },
+  "engines": {
+    "node": "10.7.0"
+  },
   "keywords": [],
   "author": "AJ Castiglione",
   "license": "ISC",
