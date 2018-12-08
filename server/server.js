@@ -133,7 +133,6 @@ app.get("/lists", authenticate, (req, res) => {
 });
 
 app.patch("/lists/:id", authenticate, (req, res) => {
-  // Get id of checklist
   let id = req.params.id;
   let items = req.body.items;
 
@@ -148,6 +147,23 @@ app.patch("/lists/:id", authenticate, (req, res) => {
       { new: true }
     ).then(list => res.send(list), e => res.status(400).send(e));
   }
+});
+
+app.delete("/lists/:id", authenticate, (req, res) => {
+  let id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    return res.send(404).send({ err: "Checklist not found." });
+  }
+
+  List.findOneAndRemove({ _id: id, _creator: req.user.id })
+    .then(list => {
+      if (!list) {
+        return res.status(404).send({ err: "Checklist could not be removed." });
+      }
+      res.send(list);
+    })
+    .catch(e => res.status(400).send(e));
 });
 
 app.listen(port, () => console.log("Server is running on port " + port));
