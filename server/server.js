@@ -2,6 +2,7 @@ require("./config/config");
 // NPM Modules
 const express = require("express");
 const bodyParser = require("body-parser");
+const { ObjectID } = require("mongodb");
 const _ = require("lodash");
 
 // Local Modules
@@ -129,6 +130,24 @@ app.get("/lists", authenticate, (req, res) => {
       res.send({ lists });
     })
     .catch(e => res.status(400).send(e));
+});
+
+app.patch("/lists/:id", authenticate, (req, res) => {
+  // Get id of checklist
+  let id = req.params.id;
+  let items = req.body.items;
+
+  if (!ObjectID.isValid(id)) {
+    return res.send(404).send({ err: "Checklist not found." });
+  }
+
+  if (items) {
+    List.findOneAndUpdate(
+      { _id: id, _creator: req.user.id },
+      { $set: { items } },
+      { new: true }
+    ).then(list => res.send(list), e => res.status(400).send(e));
+  }
 });
 
 app.listen(port, () => console.log("Server is running on port " + port));
