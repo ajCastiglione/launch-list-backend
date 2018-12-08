@@ -145,7 +145,9 @@ app.patch("/lists/:id", authenticate, (req, res) => {
       { _id: id, _creator: req.user.id },
       { $set: { items } },
       { new: true }
-    ).then(list => res.send(list), e => res.status(400).send(e));
+    )
+      .then(list => res.send(list))
+      .catch(e => res.status(400).send(e));
   }
 });
 
