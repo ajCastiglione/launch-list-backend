@@ -6,7 +6,6 @@ const { ObjectID } = require("mongodb");
 const _ = require("lodash");
 
 // Local Modules
-const { mongoose } = require("./db/mongoose");
 const { User } = require("./models/user");
 const { List } = require("./models/list");
 const { authenticate } = require("./middleware/authenticate");
