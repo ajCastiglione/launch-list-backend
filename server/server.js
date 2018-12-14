@@ -3,13 +3,14 @@ require("./config/config");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { ObjectID } = require("mongodb");
+const CryptoJS = require("crypto-js");
 const _ = require("lodash");
 
 // Local Modules
 require("./db/mongoose");
 const { User } = require("./models/user");
 const { List } = require("./models/list");
-const { authenticate } = require("./middleware/authenticate");
+const { authenticate, createUserAuth } = require("./middleware/authenticate");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -32,7 +33,7 @@ app.get("/", (req, res) => {
  */
 
 // Create new user - this will have to be modified so only admin can create users and not have it open so anyone can sign up
-app.post("/users/add", (req, res) => {
+app.post("/users/add", createUserAuth, (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
   let user = new User(body);
 
@@ -58,9 +59,12 @@ app.post("/users/login", (req, res) => {
       if (user.credentials !== []) {
         user.credentials = [];
       }
-      return user
-        .generateAuthToken()
-        .then(token => res.header("x-auth", token).send(user));
+      return user.generateAuthToken().then(token =>
+        res
+          .header("x-auth", token)
+          .status(200)
+          .send({ code: token })
+      );
     })
     .catch(e => {
       res.status(400).send({ errMsg: e });
@@ -90,10 +94,11 @@ app.get("/users/me", authenticate, (req, res) => {
   res.header("x-auth", req.token).send(req.user);
 });
 
+// Signs out authenticated user
 app.delete("/users/signout", authenticate, (req, res) => {
   req.user
     .removeCredentials(req.token)
-    .then(something => res.send({ success: `Signed user out successfully` }))
+    .then(() => res.send({ success: `Signed user out successfully` }))
     .catch(e => res.send({ err: `Unable to complete operation: ${e}` }));
 });
 
@@ -115,9 +120,10 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
  */
 
 app.post("/lists", authenticate, (req, res) => {
+  let body = _.pick(req.body, ["items", "type"]);
   let list = new List({
-    items: req.body.items,
-    type: req.body.type,
+    items: body.items,
+    type: body.type,
     _creator: req.user._id
   });
 
