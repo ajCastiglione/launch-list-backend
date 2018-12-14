@@ -17,4 +17,20 @@ const authenticate = (req, res, next) => {
     });
 };
 
-module.exports = { authenticate };
+const createUserAuth = (req, res, next) => {
+  let pw = CryptoJS.AES.decrypt(
+    req.header("superCommand"),
+    process.env.CRYPTO_SECRET
+  );
+
+  if (pw === process.env.USER_CREATION_CODE) {
+    next();
+  } else {
+    res.status(401).send({
+      err:
+        "Code is incorrect. Please contact an administrator if you believe this was a mistake."
+    });
+  }
+};
+
+module.exports = { authenticate, createUserAuth };
