@@ -1,4 +1,5 @@
 require("./config/config");
+const listContent = require("./config/listContent.json");
 // NPM Modules
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -123,9 +124,20 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
  */
 
 app.post("/lists", authenticate, (req, res) => {
-  let body = _.pick(req.body, ["items", "type"]);
+  let body = _.pick(req.body, ["listName", "type", "websiteName"]);
+  let items = listContent[body.type];
+  let listName = body.type;
+
+  if (listName !== "todo-list") {
+    listName = body.type;
+  } else {
+    listName = body.listName;
+  }
+
   let list = new List({
-    items: body.items,
+    items,
+    listName,
+    websiteName: body.websiteName,
     type: body.type,
     _creator: req.user._id
   });
