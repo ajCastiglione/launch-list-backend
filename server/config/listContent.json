@@ -1,0 +1,219 @@
+{
+  "todo-list": [{ "text": "This is an example ToDo" }],
+
+  "launch-list": [
+    {
+      "text": "Text checked and free from spelling, grammatical, factual and formatting errors"
+    },
+    { "text": "Page titles and meta data unique, consistent and descriptive" },
+    { "text": "Images have appropriate alternative (alt) text" },
+    { "text": "Navigation easy to find and use, and all links working" },
+    { "text": "404 page created and serving correctly" },
+    {
+      "text": "GDPR compliant terms and conditions or privacy policy pages created"
+    },
+    {
+      "text": "IF cookies : GDPR compliant cookie information policy/banner created"
+    },
+    { "text": "Footer copyright notice included and year(s) correct" },
+    { "text": "Internal backlinks done correctly" },
+    {
+      "text": "Forms working correctly and email notifications reaching correct people"
+    },
+    {
+      "text": "Form success handling is implemented correctly and has a thank you message"
+    },
+    { "text": "Contact details correct and easy to find" },
+    { "text": "Links to social media accounts present and correct" },
+    { "text": "HTML W3C valid" },
+    { "text": "CSS W3C valid" },
+    {
+      "text": "Website run through Pagespeed Insights / pingdom and results adequate"
+    },
+    {
+      "text": "Website run through Mobile Friendly Test and results adequate"
+    },
+    {
+      "text": "HTML, CSS and JS files minified and concatenated where possible"
+    },
+    {
+      "text": "Images and videos adequate quality and compressed as small as possible"
+    },
+    { "text": "Optimize images and compress as much as possible" },
+    { "text": "Website tested and working in all targeted browsers" },
+    { "text": "Website tested and working on mobile devices and tablets" },
+    { "text": "Favicon and touch icons for mobile devices present" },
+    {
+      "text": "Website functions for visitors with Javascript disabled OR handled accordingly"
+    },
+    {
+      "text": "Ensure security implementations are functional and not blocking incorrectly"
+    },
+    { "text": "Have a spam filter solution" },
+    { "text": "SEO solution is implemented and working as expected" },
+    { "text": "Links are easily recognisable and have a clear focus state" },
+    {
+      "text": "All form fields have associated labels (not placeholder text)"
+    },
+    { "text": "ARIA landmark roles used where appropriate" },
+    { "text": "Color contrast is appropriate" },
+    { "text": "Domain name and web hosting set up and linked" },
+    { "text": "IF premium : Automatic backups configured and working" },
+    { "text": "SSL certificate installed" },
+    {
+      "text": "Files fully integrated with version control and deploy path set up"
+    },
+    { "text": "Logins are secure passwords" },
+    { "text": "Analytics tracking installed and working" },
+    { "text": "Event tracking set up and working for key metrics" },
+    { "text": "Search console account set up and linked" },
+    { "text": "GZIP enabled" },
+    { "text": "301 redirects to pages which no longer exist set up" },
+    { "text": "Expires caching activated" },
+    { "text": "Clean URL rewrites in place and working" },
+    { "text": "All versions of URL redirecting to same format" },
+    { "text": "robots.txt file not blocking search engine spiders" },
+    { "text": "Final check for cross-browser compatability" },
+    { "text": "Final check for responsiveness / mobile friendly" },
+    {
+      "text": "Final check on multiple devices (desktop, laptop, tablet, phone)"
+    },
+    { "text": "Take backup of website" }
+  ],
+  "live-list": [
+    { "text": "Is the website displaying properly on the live url" },
+    {
+      "text": "Are all assests mapped correctly - no soft 404s for missing resources"
+    },
+    { "text": "Analytics is tracking properly and capturing necessary data" },
+    { "text": "Google Search Console is tracking properly" },
+    {
+      "text": "Google business profile setup and directing to the correct place"
+    },
+    { "text": "Live test of security implementation" },
+    { "text": "Review bounce rates and figuring out what is / isn't working" },
+    { "text": "Forms still function as intended" },
+    { "text": "Disable server and application error reporting and logging" }
+  ],
+  "ecom-list": [
+    {
+      "text": "Text checked and free from spelling, grammatical, factual and formatting errors"
+    },
+    { "text": "Page titles and meta data unique, consistent and descriptive" },
+    { "text": "Images have appropriate alternative (alt) text" },
+    { "text": "Navigation easy to find and use, and all links working" },
+    { "text": "404 page created and serving correctly" },
+    {
+      "text": "GDPR compliant terms and conditions or privacy policy pages created"
+    },
+    {
+      "text": "IF cookies : GDPR compliant cookie information policy/banner created"
+    },
+    { "text": "Footer copyright notice included and year(s) correct" },
+    { "text": "Internal backlinks done correctly" },
+    {
+      "text": "Forms working correctly and email notifications reaching correct people"
+    },
+    {
+      "text": "Form success handling is implemented correctly and has a thank you message"
+    },
+    { "text": "Contact details correct and easy to find" },
+    { "text": "Links to social media accounts present and correct" },
+    { "text": "HTML W3C valid" },
+    { "text": "CSS W3C valid" },
+    {
+      "text": "Website run through Pagespeed Insights / pingdom and results adequate"
+    },
+    {
+      "text": "Website run through Mobile Friendly Test and results adequate"
+    },
+    {
+      "text": "HTML, CSS and JS files minified and concatenated where possible"
+    },
+    {
+      "text": "Images and videos adequate quality and compressed as small as possible"
+    },
+    { "text": "Optimize images and compress as much as possible" },
+    { "text": "Website tested and working in all targeted browsers" },
+    { "text": "Website tested and working on mobile devices and tablets" },
+    { "text": "Favicon and touch icons for mobile devices present" },
+    {
+      "text": "Website functions for visitors with Javascript disabled OR handled accordingly"
+    },
+    {
+      "text": "Ensure security implementations are functional and not blocking incorrectly"
+    },
+    { "text": "Have a spam filter solution" },
+    { "text": "SEO solution is implemented and working as expected" },
+    { "text": "Links are easily recognisable and have a clear focus state" },
+    {
+      "text": "All form fields have associated labels (not placeholder text)"
+    },
+    { "text": "ARIA landmark roles used where appropriate" },
+    { "text": "Color contrast is appropriate" },
+    { "text": "Domain name and web hosting set up and linked" },
+    { "text": "IF premium : Automatic backups configured and working" },
+    { "text": "SSL certificate installed" },
+    {
+      "text": "Files fully integrated with version control and deploy path set up"
+    },
+    { "text": "Logins are secure passwords" },
+    { "text": "Analytics tracking installed and working" },
+    { "text": "Event tracking set up and working for key metrics" },
+    { "text": "Search console account set up and linked" },
+    { "text": "GZIP enabled" },
+    { "text": "301 redirects to pages which no longer exist set up" },
+    { "text": "Expires caching activated" },
+    { "text": "Clean URL rewrites in place and working" },
+    { "text": "All versions of URL redirecting to same format" },
+    { "text": "robots.txt file not blocking search engine spiders" },
+    { "text": "Final check for cross-browser compatability" },
+    { "text": "Final check for responsiveness / mobile friendly" },
+    {
+      "text": "Final check on multiple devices (desktop, laptop, tablet, phone)"
+    },
+    { "text": "Add any available sales channels" },
+    {
+      "text": "Check payment gateway - ensure all payments are being processed or rejected as intended"
+    },
+    { "text": "Manage 301 redirects for product categories etc" },
+    { "text": "Check tax rates for governing state" },
+    {
+      "text": "IF physical location : ensure location and contact details are correct"
+    },
+    { "text": "Check that given shipping method provides correct rates" },
+    { "text": "Submit xml sitemap to search console" },
+    {
+      "text": "IF coupon codes : test to ensure they are working for specified conditions"
+    },
+    { "text": "Ensure order data is going through correct channels" }
+  ],
+  "ecom-live-list": [
+    { "text": "Is the website displaying properly on the live url" },
+    {
+      "text": "Are all assests mapped correctly - no soft 404s for missing resources"
+    },
+    { "text": "Analytics is tracking properly and capturing necessary data" },
+    { "text": "Google Search Console is tracking properly" },
+    {
+      "text": "Google business profile setup and directing to the correct place"
+    },
+    { "text": "Live test of security implementation" },
+    { "text": "Review bounce rates and figuring out what is / isn't working" },
+    { "text": "Forms still function as intended" },
+    { "text": "Disable server and application error reporting and logging" },
+
+    { "text": "Create new customer account" },
+    {
+      "text": "Login as a new customer (try forgot password as well)"
+    },
+    {
+      "text": "Place test order via new account (reviewing payment, tax, and shipping)"
+    },
+    { "text": "Turn off developer mode and any other developer tools" },
+    {
+      "text": "Backup all data (order, customers, products, etc)"
+    },
+    { "text": "Setup downtime alerts" }
+  ]
+}
