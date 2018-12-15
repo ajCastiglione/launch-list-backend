@@ -24,6 +24,15 @@ const List = mongoose.model("List", {
     minlength: 1,
     trim: true
   },
+  listName: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  websiteName: {
+    type: String,
+    required: true
+  },
   completed: {
     type: Boolean,
     default: false
