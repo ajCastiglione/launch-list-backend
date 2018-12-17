@@ -29,15 +29,15 @@ const List = mongoose.model("List", {
     required: true,
     unique: true
   },
-  websiteName: {
-    type: String,
-    required: true
-  },
   completed: {
     type: Boolean,
     default: false
   },
   completedAt: {
+    type: Number,
+    default: null
+  },
+  createdAt: {
     type: Number,
     default: null
   },
