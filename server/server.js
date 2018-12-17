@@ -124,21 +124,15 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
  */
 
 app.post("/lists", authenticate, (req, res) => {
-  let body = _.pick(req.body, ["listName", "type", "websiteName"]);
+  let body = _.pick(req.body, ["listName", "type"]);
   let items = listContent[body.type];
-  let listName = body.type;
-
-  if (listName !== "todo-list") {
-    listName = body.type;
-  } else {
-    listName = body.listName;
-  }
+  let listName = body.listName;
 
   let list = new List({
     items,
     listName,
-    websiteName: body.websiteName,
     type: body.type,
+    createdAt: new Date(),
     _creator: req.user._id
   });
 
@@ -147,6 +141,17 @@ app.post("/lists", authenticate, (req, res) => {
 
 app.get("/lists", authenticate, (req, res) => {
   List.find({ _creator: req.user._id })
+    .then(lists => {
+      res.send({ lists });
+    })
+    .catch(e => res.status(400).send(e));
+});
+
+// Get specific list type
+app.get("/lists/:type", authenticate, (req, res) => {
+  let type = req.params.type;
+
+  List.find({ _creator: req.user._id, type })
     .then(lists => {
       res.send({ lists });
     })
