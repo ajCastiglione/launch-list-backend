@@ -1,7 +1,7 @@
 {
-  "todo-list": [{ "text": "This is an example ToDo" }],
+  "todo_list": [{ "text": "This is an example ToDo" }],
 
-  "launch-list": [
+  "launch_list": [
     {
       "text": "Text checked and free from spelling, grammatical, factual and formatting errors"
     },
@@ -80,7 +80,7 @@
     },
     { "text": "Take backup of website" }
   ],
-  "live-list": [
+  "live_list": [
     { "text": "Is the website displaying properly on the live url" },
     {
       "text": "Are all assests mapped correctly - no soft 404s for missing resources"
@@ -95,7 +95,7 @@
     { "text": "Forms still function as intended" },
     { "text": "Disable server and application error reporting and logging" }
   ],
-  "ecom-list": [
+  "ecom_list": [
     {
       "text": "Text checked and free from spelling, grammatical, factual and formatting errors"
     },
@@ -188,7 +188,7 @@
     },
     { "text": "Ensure order data is going through correct channels" }
   ],
-  "ecom-live-list": [
+  "ecom_live_list": [
     { "text": "Is the website displaying properly on the live url" },
     {
       "text": "Are all assests mapped correctly - no soft 404s for missing resources"
