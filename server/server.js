@@ -158,6 +158,7 @@ app.get("/lists/:type", authenticate, (req, res) => {
     .catch(e => res.status(400).send(e));
 });
 
+// Update specific list
 app.patch("/lists/:id", authenticate, (req, res) => {
   let id = req.params.id;
   let items = req.body.items;
@@ -169,10 +170,27 @@ app.patch("/lists/:id", authenticate, (req, res) => {
   if (items) {
     List.findOneAndUpdate(
       { _id: id, _creator: req.user.id },
-      { $set: { items } },
+      { $set: { items, completed: false, completeAt: null } },
       { new: true }
     )
-      .then(list => res.send(list))
+      .then(list => {
+        let totalComplete = 0;
+        for (let item of items) {
+          if (item.completed === true) totalComplete++;
+        }
+        if (totalComplete === items.length) {
+          List.findOneAndUpdate(
+            { _id: id, _creator: req.user.id },
+            { $set: { completed: true, completedAt: new Date() } },
+            { new: true }
+          ).then(
+            completeList => res.send(completeList),
+            e => res.status(400).send(e)
+          );
+        } else {
+          res.send(list);
+        }
+      })
       .catch(e => res.status(400).send(e));
   }
 });
