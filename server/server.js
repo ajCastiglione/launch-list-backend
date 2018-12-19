@@ -19,7 +19,7 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,PATCH,DELETE");
 
   res.header(
     "Access-Control-Allow-Headers",
@@ -124,8 +124,8 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
  */
 
 app.post("/lists", authenticate, (req, res) => {
-  let body = _.pick(req.body, ["listName", "type"]);
-  let items = listContent[body.type];
+  let body = _.pick(req.body, ["listName", "type", "items"]);
+  let items = body.items ? body.items : listContent[body.type];
   let listName = body.listName;
 
   let list = new List({
@@ -158,8 +158,19 @@ app.get("/lists/:type", authenticate, (req, res) => {
     .catch(e => res.status(400).send(e));
 });
 
-// Update specific list
-app.patch("/lists/:id", authenticate, (req, res) => {
+// Get single list
+app.get("/list/:id", authenticate, (req, res) => {
+  let id = req.params.id;
+
+  List.find({ _creator: req.user._id, _id: id })
+    .then(list => {
+      res.send({ list });
+    })
+    .catch(e => res.status(400).send(e));
+});
+
+// Update specific list - items only
+app.patch("/list/:id", authenticate, (req, res) => {
   let id = req.params.id;
   let items = req.body.items;
 
@@ -170,7 +181,7 @@ app.patch("/lists/:id", authenticate, (req, res) => {
   if (items) {
     List.findOneAndUpdate(
       { _id: id, _creator: req.user.id },
-      { $set: { items, completed: false, completeAt: null } },
+      { $set: { items, completed: false, completedAt: null } },
       { new: true }
     )
       .then(list => {
