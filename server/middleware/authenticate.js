@@ -1,4 +1,5 @@
 const { User } = require("./../models/user");
+const CryptoJS = require("crypto-js");
 
 const authenticate = (req, res, next) => {
   let token = req.header("x-auth");
