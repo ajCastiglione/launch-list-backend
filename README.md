@@ -34,3 +34,9 @@ This will be the API for the frontend checklist application built in React.
 <li> mongoose: ^5.2.9</li>
 <li>validator: ^10.7.0</li>
 </ul>
+
+# TODO
+
+<ul>
+<li>Add different types of lists corresponding with frontend</li>
+</ul>

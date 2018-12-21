@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { ObjectID } = require("mongodb");
 const CryptoJS = require("crypto-js");
+const bcrypt = require("bcryptjs");
 const _ = require("lodash");
 
 // Local Modules
@@ -37,7 +38,7 @@ app.get("/", (req, res) => {
  */
 
 // Create new user - this will have to be modified so only admin can create users and not have it open so anyone can sign up
-app.post("/users/add", createUserAuth, (req, res) => {
+app.post("/users/add", (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
   let user = new User(body);
 
@@ -67,7 +68,7 @@ app.post("/users/login", (req, res) => {
         res
           .header("x-auth", token)
           .status(200)
-          .send({ code: token })
+          .send({ code: token, role: user.role })
       );
     })
     .catch(e => {
@@ -93,9 +94,86 @@ app.get("/users", authenticate, (req, res) => {
   });
 });
 
-// User account - will be basic res for now
+// User account
 app.get("/users/me", authenticate, (req, res) => {
-  res.header("x-auth", req.token).send(req.user);
+  res.header("x-auth", req.token).send({ user: req.user });
+});
+
+// Updates signedin user
+app.patch("/users/me", authenticate, (req, res) => {
+  let body = _.pick(req.body, [
+    "username",
+    "profile_img",
+    "profile_pg_bg",
+    "email",
+    "password"
+  ]);
+
+  if (body.profile_img === "")
+    body.profile_img =
+      "https://s3.amazonaws.com/minervalists/default_user_icon.png";
+  if (body.profile_pg_bg === "")
+    body.profile_pg_bg =
+      "https://s3.amazonaws.com/minervalists/panorama-bg.jpg";
+
+  let uid = req.user._id;
+
+  if (body.password) {
+    return new Promise((resolve, reject) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(body.password, salt, (err, hash) => {
+          resolve(hash);
+        });
+      });
+    }).then(hash => {
+      User.findOneAndUpdate(
+        { _id: uid },
+        {
+          $set: {
+            username: body.username,
+            profile_img: body.profile_img,
+            profile_pg_bg: body.profile_pg_bg,
+            email: body.email,
+            password: hash
+          }
+        },
+        { new: true }
+      )
+        .then(user => {
+          let userInfo = _.pick(user, [
+            "email",
+            "username",
+            "profile_pg_bg",
+            "profile_img"
+          ]);
+          res.send(userInfo);
+        })
+        .catch(e => res.status(400).send(e));
+    });
+  } else {
+    User.findOneAndUpdate(
+      { _id: uid },
+      {
+        $set: {
+          username: body.username,
+          profile_img: body.profile_img,
+          profile_pg_bg: body.profile_pg_bg,
+          email: body.email
+        }
+      },
+      { new: true }
+    )
+      .then(user => {
+        let userInfo = _.pick(user, [
+          "email",
+          "username",
+          "profile_pg_bg",
+          "profile_img"
+        ]);
+        res.send(userInfo);
+      })
+      .catch(e => res.status(400).send(e));
+  }
 });
 
 // Signs out authenticated user
