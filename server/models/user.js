@@ -28,6 +28,14 @@ let UserSchema = new mongoose.Schema({
   username: {
     type: String
   },
+  profile_img: {
+    type: String,
+    default: "https://s3.amazonaws.com/minervalists/default_user_icon.png"
+  },
+  profile_pg_bg: {
+    type: String,
+    default: "https://s3.amazonaws.com/minervalists/panorama-bg.jpg"
+  },
   credentials: [
     {
       access: {
@@ -67,7 +75,7 @@ UserSchema.methods.removeCredentials = function(token) {
   });
 };
 
-// This is attached to the Model
+// Attached to the Model
 UserSchema.statics.findByToken = function(token) {
   let User = this;
   let decoded;
