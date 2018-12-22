@@ -39,4 +39,5 @@ This will be the API for the frontend checklist application built in React.
 
 <ul>
 <li>Add different types of lists corresponding with frontend</li>
+<li>Add default prevention for removing admin user. Will send res saying ID is = to requested removal or something.</li>
 </ul>

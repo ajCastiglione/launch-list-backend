@@ -190,14 +190,21 @@ app.delete("/users/signout", authenticate, (req, res) => {
 // Remove user - will have to be admin role or some role that has 1 superadmin power
 app.delete("/users/remove/:email", authenticate, (req, res) => {
   let email = req.params.email;
-  if (req.user.role !== "admin")
+
+  if (req.user.role !== "admin") {
     return res
       .status(401)
       .send({ err: "User role is too low to perform this action" });
+  }
 
-  User.deleteUser(email)
-    .then(removedUser => res.send(removedUser))
-    .catch(e => res.status(400).send(e));
+  // Add prevention from deleting signed in admin user.
+  if (req.user.email === email) {
+    return res.status(409).send({ err: "User cannot remove themselves." });
+  } else {
+    User.deleteUser(email)
+      .then(removedUser => res.send(removedUser))
+      .catch(e => res.status(400).send(e));
+  }
 });
 
 /**
