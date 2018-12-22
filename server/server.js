@@ -38,21 +38,24 @@ app.get("/", (req, res) => {
  */
 
 // Create new user - this will have to be modified so only admin can create users and not have it open so anyone can sign up
-app.post("/users/add", (req, res) => {
+app.post("/users/add", authenticate, (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
   let user = new User(body);
-
-  user
-    .save()
-    .then(() => {
-      return user.generateAuthToken();
-    })
-    .then(token => {
-      res.header("x-auth", token).send(user);
-    })
-    .catch(e => {
-      res.status(400).send(e);
-    });
+  if (req.user.role === "admin") {
+    user
+      .save()
+      .then(() => {
+        return user.generateAuthToken();
+      })
+      .then(token => {
+        res.header("x-auth", token).send(user);
+      })
+      .catch(e => {
+        res.status(400).send(e);
+      });
+  } else {
+    res.status(401).send({ e: "User role is too low to perform this action." });
+  }
 });
 
 // Login for existing user
@@ -86,8 +89,8 @@ app.get("/users", authenticate, (req, res) => {
   User.find({}).then(users => {
     let info = [];
 
-    users.map((el, idx) => {
-      info.push(_.pick(el, ["_id", "email", "role"]));
+    users.map(el => {
+      info.push(_.pick(el, ["_id", "email", "role", "username"]));
     });
 
     res.send(info);
