@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
 
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, x-auth, Content-Type, superCommand"
+    "Origin, x-auth, Content-Type, createcommand"
   );
   next();
 });
@@ -38,10 +38,11 @@ app.get("/", (req, res) => {
  */
 
 // Create new user - this will have to be modified so only admin can create users and not have it open so anyone can sign up
-app.post("/users/add", authenticate, (req, res) => {
+app.post("/users/add", createUserAuth, (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
   let user = new User(body);
-  if (req.user.role === "admin") {
+
+  if (req.user.role === "admin" || req.user === "createCommand") {
     user
       .save()
       .then(() => {
@@ -202,7 +203,9 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
     return res.status(409).send({ err: "User cannot remove themselves." });
   } else {
     User.deleteUser(email)
-      .then(removedUser => res.send(removedUser))
+      .then(doc =>
+        res.send({ success: "Removed user successfully", user: doc })
+      )
       .catch(e => res.status(400).send(e));
   }
 });
