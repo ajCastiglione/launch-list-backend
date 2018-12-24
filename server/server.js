@@ -42,17 +42,19 @@ app.post("/users/add", createUserAuth, (req, res) => {
   let body = _.pick(req.body, ["email", "password", "role"]);
   let user = new User(body);
 
-  if (req.user.role === "admin" || req.user === "createCommand") {
+  if (req.user === "createCommand" || req.user.role === "admin") {
     user
       .save()
       .then(() => {
         return user.generateAuthToken();
       })
       .then(token => {
-        res.header("x-auth", token).send(user);
+        res
+          .header("x-auth", token)
+          .send({ success: "added user successfully" });
       })
       .catch(e => {
-        res.status(400).send(e);
+        res.status(400).send({ err: "User already exists." });
       });
   } else {
     res.status(401).send({ e: "User role is too low to perform this action." });
