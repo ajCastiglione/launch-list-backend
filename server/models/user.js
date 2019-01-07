@@ -116,10 +116,9 @@ UserSchema.statics.findByCredentials = function(email, password) {
 UserSchema.statics.deleteUser = function(email) {
   let User = this;
 
-  return User.findOneAndRemove({ email }).then(err => {
+  return User.findOneAndRemove({ email }).then(doc => {
     return new Promise((resolve, reject) => {
-      if (err) reject(err);
-      resolve(`Successfully removed the user ${email}`);
+      return resolve(doc);
     });
   });
 };
