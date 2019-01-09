@@ -231,7 +231,8 @@ app.post("/lists", authenticate, (req, res) => {
     listName,
     type: body.type,
     createdAt: new Date(),
-    _creator: creator
+    _creator: creator,
+    email: req.user.email
   });
 
   list.save().then(doc => res.send(doc), e => res.status(400).send(e));

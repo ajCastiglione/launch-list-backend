@@ -43,6 +43,9 @@ const List = mongoose.model("List", {
   _creator: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
+  },
+  email: {
+    type: String
   }
 });
 
