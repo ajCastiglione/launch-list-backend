@@ -4,7 +4,6 @@ const listContent = require("./config/listContent.json");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { ObjectID } = require("mongodb");
-const CryptoJS = require("crypto-js");
 const bcrypt = require("bcryptjs");
 const _ = require("lodash");
 
