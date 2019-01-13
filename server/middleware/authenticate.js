@@ -47,6 +47,7 @@ const createUserAuth = (req, res, next) => {
         err:
           "Code is incorrect. Please contact an administrator if you believe this was a mistake."
       });
+      next();
     }
   }
 };

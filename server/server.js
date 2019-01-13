@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
 
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, x-auth, Content-Type, createcommand"
+    "Origin, x-auth, Content-Type, createcommand, creator"
   );
   next();
 });
@@ -216,22 +216,28 @@ app.delete("/users/remove/:email", authenticate, (req, res) => {
  * This section will be CRUD abilities for all lists
  */
 
+// Add new list
 app.post("/lists", authenticate, (req, res) => {
   let body = _.pick(req.body, ["listName", "type", "items"]);
   let items = body.items ? body.items : listContent[body.type];
   let listName = body.listName;
+  let creator =
+    req.user.role === "admin" && req.body.creator
+      ? req.body.creator
+      : req.user._id;
 
   let list = new List({
     items,
     listName,
     type: body.type,
     createdAt: new Date(),
-    _creator: req.user._id
+    _creator: creator
   });
 
   list.save().then(doc => res.send(doc), e => res.status(400).send(e));
 });
 
+// GET all lists for authenticated user
 app.get("/lists", authenticate, (req, res) => {
   List.find({ _creator: req.user._id })
     .then(lists => {
@@ -301,12 +307,16 @@ app.patch("/list/:id", authenticate, (req, res) => {
 
 app.delete("/lists/:id", authenticate, (req, res) => {
   let id = req.params.id;
+  let creator =
+    req.user.role === "admin" && req.header("creator")
+      ? req.header("creator")
+      : req.user.id;
 
   if (!ObjectID.isValid(id)) {
     return res.send(404).send({ err: "Checklist not found." });
   }
 
-  List.findOneAndRemove({ _id: id, _creator: req.user.id })
+  List.findOneAndRemove({ _id: id, _creator: creator })
     .then(list => {
       if (!list) {
         return res.status(404).send({ err: "Checklist could not be removed." });
@@ -314,6 +324,24 @@ app.delete("/lists/:id", authenticate, (req, res) => {
       res.send(list);
     })
     .catch(e => res.status(400).send(e));
+});
+
+/**
+ * Admin section - will have all routes for administrative CRUD abilities
+ */
+
+// Get all lists
+app.get("/all-lists", authenticate, (req, res) => {
+  let role = req.user.role;
+
+  if (role !== "admin")
+    return res.status(401).send({ err: "User cannot perform this action." });
+
+  List.find({})
+    .then(lists => {
+      res.send({ lists });
+    })
+    .catch(e => res.status(400).send({ err: e }));
 });
 
 app.listen(port, () => console.log("Server is running on port " + port));
